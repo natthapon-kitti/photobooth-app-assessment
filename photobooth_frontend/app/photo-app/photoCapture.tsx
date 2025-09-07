@@ -5,6 +5,7 @@ import type React from "react"
 import { useCallback, useEffect, useRef, useState } from "react"
 import TakingPhotoButton from "../components/takingPhotoButton"
 import { useStore } from "@/app/store/store"
+import ChangeLayoutButton from "../components/changeLayoutButton"
 
 
 export default function PhotoCapture() {
@@ -12,7 +13,6 @@ export default function PhotoCapture() {
 
     const setPageState = useStore((state) => state.setPageState)
     const layout = useStore((state) => state.layout)
-
 
     const [isCameraOpen, setIsCameraOpen] = useState(false)
     const [isError, setIsError] = useState("")
@@ -49,10 +49,30 @@ export default function PhotoCapture() {
         }
     }, [])
 
+    const stopCamera = useCallback(async () => {
+        if (streamRef.current) {
+            streamRef.current.getTracks().forEach((track) => track.stop());
+            streamRef.current = null;
+        }
+        if (videoRef.current) {
+            videoRef.current.srcObject = null;
+        }
+
+        setIsCapturing(false)
+    }, [])
+
+
+
     useEffect(() => {
         if (isCameraOpen) {
             startCamera()
+
+        } else {
+            stopCamera()
         }
+
+
+
     }, [isCameraOpen])
 
 
@@ -80,21 +100,28 @@ export default function PhotoCapture() {
                     autoPlay
                     playsInline
                     muted
-                    className="w-full h-full object-cover "
+                    className="w-full h-full object-cover rounded-2xl"
 
                 />
             }
 
 
-            <canvas ref={canvasRef} className="hidden" />
+            {/* <canvas ref={canvasRef} className="hidden" /> */}
 
 
+            <div className="flex justify-center items-center gap-4">
+                <ChangeLayoutButton
+                    setPageState={setPageState}
+                    isCameraOpen={isCameraOpen}
+                    setIsCameraOpen={setIsCameraOpen}
+                />
 
-            <TakingPhotoButton
-                isCameraOpen={isCameraOpen}
-                setIsCameraOpen={setIsCameraOpen}
-                startCamera={startCamera}
-            />
+                <TakingPhotoButton
+                    isCameraOpen={isCameraOpen}
+                    setIsCameraOpen={setIsCameraOpen}
+                />
+            </div>
+
 
         </div >
     )
