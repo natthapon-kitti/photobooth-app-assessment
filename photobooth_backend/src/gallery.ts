@@ -4,6 +4,34 @@ import { PrismaClient } from "../src/generated/prisma"
 const prisma = new PrismaClient()
 
 export const galleryRoutes = new Elysia({ prefix: '/gallery' })
+    .get('/get-image-by-user-id', async ({ set, cookie: { session } }) => {
+
+        if (!session.value) {
+            set.status = 404
+            return {
+                message: "Unauthenticated"
+            }
+        }
+        // find user_id by session id
+        const findUserID = await prisma.sessions.findUnique({
+            where: {
+                id: session.value,
+            },
+            select: {
+                user_id: true,
+            },
+        })
+
+        const galleries = await prisma.galleries.findMany({
+            where: {
+                user_id: findUserID?.user_id
+            }
+        })
+        console.log(galleries)
+
+        return galleries
+
+    })
     .post('/save-image', async ({ body, set, cookie: { session } }) => {
 
 
@@ -15,16 +43,15 @@ export const galleryRoutes = new Elysia({ prefix: '/gallery' })
         }
         const { image_url, title } = body
 
-        console.log(session.value)
-
+        // find user_id by session id
         const findUserID = await prisma.sessions.findUnique({
             where: {
                 id: session.value,
             },
             select: {
-                user_id: true, // Only select the user_id to reduce data transfer
+                user_id: true,
             },
-        });
+        })
 
         console.log(findUserID)
 
