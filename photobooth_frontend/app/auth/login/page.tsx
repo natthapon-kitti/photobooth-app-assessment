@@ -1,6 +1,7 @@
 "use client"
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
+import Link from "next/link"
 
 export default function Login() {
     const [form, setForm] = useState({
@@ -103,6 +104,11 @@ export default function Login() {
                             {error}
                         </div>
                     )}
+                    <div className="flex gap-2">
+                        <label className="text-slate-400 text-sm">Don't have account yet?</label>
+                        <Link href='/auth/register' className="text-purple-500 text-sm cursor-pointer" >register</Link>
+                    </div>
+
                     <button
                         type="submit"
                         className="w-full bg-gradient-to-r from-purple-400 to-purple-600 text-white px-6 py-3 rounded-full hover:from-purple-500 hover:to-purple-700 transition font-mono font-bold shadow-lg"
