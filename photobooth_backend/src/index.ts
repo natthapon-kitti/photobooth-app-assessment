@@ -7,7 +7,19 @@ import { galleryRoutes } from "./gallery"
 
 
 const prisma = new PrismaClient()
-const port = Bun.env.SERVER_PORT
+const port = Bun.env.SERVER_PORT ?? 3000
+
+type RegisterBody = {
+  username: string
+  password: string
+  email: string
+}
+
+type LoginBody = {
+  email: string
+  password: string
+}
+
 
 const app = new Elysia()
   .use(cors({
@@ -17,7 +29,7 @@ const app = new Elysia()
   .get("/", () => "Hello Elysia")
   // registration endpoint
   .post("/register", async ({ body, set, cookie: { session } }) => {
-    const { username, password, email } = body
+    const { username, password, email } = typeof body === "string" ? JSON.parse(body) : body
     if (!username || !password || !email) {
       set.status = 404
       return { error: "Missing fields" }
@@ -58,7 +70,7 @@ const app = new Elysia()
   })
   // login endpoint
   .post("/login", async ({ body, set, cookie: { session } }) => {
-    const { email, password } = body
+    const { email, password } = typeof body === "string" ? JSON.parse(body) : body
     if (!email || !password) {
       set.status = 404
       return { error: "Missing fields" }

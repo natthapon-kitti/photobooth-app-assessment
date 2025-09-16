@@ -46,7 +46,7 @@ export default function Login() {
 
     useEffect(() => {
         const url = process.env.NEXT_PUBLIC_API_URL! + process.env.NEXT_PUBLIC_APP_PORT!
-        const response = fetch(url + '/me', {
+        fetch(url + '/me', {
             method: 'GET',
             credentials: 'include'
         })

@@ -4,6 +4,7 @@ import { useStore } from "../store/store"
 
 type SaveToGalleryButtonProps = {
     imageUrl: string
+    caption: string
 }
 
 export default function SaveToGalleryButton({ imageUrl, caption }: SaveToGalleryButtonProps) {
@@ -18,11 +19,11 @@ export default function SaveToGalleryButton({ imageUrl, caption }: SaveToGallery
 
             // check if user logged in 
             // if no so let user login first
-            const response = fetch(url + '/me', {
+            fetch(url + '/me', {
                 method: 'GET',
                 credentials: 'include'
             })
-                .then((response) => {
+                .then(() => {
 
                     console.log(imageUrl)
                     const body = {
@@ -36,7 +37,7 @@ export default function SaveToGalleryButton({ imageUrl, caption }: SaveToGallery
                         method: 'POST',
                         credentials: 'include',
                         body: JSON.stringify(body)
-                    }).then((res) => {
+                    }).then(() => {
                         setPageState(1)
                     })
 

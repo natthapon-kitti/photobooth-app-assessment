@@ -39,8 +39,8 @@ export default function Register() {
             setPageState(3)
 
             alert(`Logged in as ${form.email}`)
-        } catch (err: any) {
-            setError(err.message || 'Registration failed')
+        } catch {
+            setError('Registration failed')
         }
     }
 

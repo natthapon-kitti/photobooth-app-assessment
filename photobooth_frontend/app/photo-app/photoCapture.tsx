@@ -17,13 +17,9 @@ export default function PhotoCapture() {
     const layout = useStore((state) => state.layout)
 
     const [isCameraOpen, setIsCameraOpen] = useState(false)
-    const [isError, setIsError] = useState("")
-    const [isProcessing, setIsProcessing] = useState(false)
-    const [isCapturing, setIsCapturing] = useState(false)
     const [showFlash, setShowFlash] = useState(false)
     const [capturedImage, setCapturedImage] = useState<string | null>(null)
     const [capturedPhotos, setCapturedPhotos] = useState<string[]>([])
-    const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0)
     const [countdown, setCountdown] = useState<number | null>(null)
     const [caption, setCaption] = useState("")
 
@@ -35,8 +31,6 @@ export default function PhotoCapture() {
 
     const startCamera = useCallback(async () => {
         try {
-            setIsError("")
-            setIsCapturing(true)
             const stream = await navigator.mediaDevices.getUserMedia({
                 video: {
                     facingMode: "user",
@@ -50,7 +44,6 @@ export default function PhotoCapture() {
             }
         } catch (error) {
             console.log(error)
-            setIsCapturing(false)
         }
     }, [])
 
@@ -65,15 +58,12 @@ export default function PhotoCapture() {
             videoRef.current.srcObject = null
         }
 
-        setIsCapturing(false)
     }, [])
 
     const capturePhoto = useCallback(async () => {
 
         if (videoRef.current && canvasRef.current) {
             try {
-                setIsProcessing(true)
-                setIsError("")
 
                 setShowFlash(true)
                 setTimeout(() => setShowFlash(false), 300)
@@ -112,7 +102,6 @@ export default function PhotoCapture() {
 
                     }, 500)
 
-                    setCurrentPhotoIndex(newPhotos.length)
 
                     console.log("Current Photo:", newPhotos)
 
@@ -121,9 +110,7 @@ export default function PhotoCapture() {
                 }
             } catch (error) {
                 console.log(error)
-                setIsError("Failed to capture photo. Please try again.")
             } finally {
-                setIsProcessing(false)
             }
         }
     }, [layout, capturedPhotos])
@@ -241,9 +228,7 @@ export default function PhotoCapture() {
 
     const retakePhoto = useCallback(() => {
         setCapturedImage(null)
-        setIsError("")
         setCapturedPhotos([])
-        setCurrentPhotoIndex(0)
     }, [])
 
     useEffect(() => {
@@ -258,7 +243,6 @@ export default function PhotoCapture() {
                     console.log("Final Photo Strip:", stripImage)
 
                     // reset image index for next time
-                    setCurrentPhotoIndex(0)
                 }
             }
         }

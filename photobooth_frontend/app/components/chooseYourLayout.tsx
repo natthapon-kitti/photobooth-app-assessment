@@ -1,7 +1,11 @@
 import Image from 'next/image'
 import { useStore } from "@/app/store/store"
 
-export default function ChooseYourLayout({ setPageState }) {
+interface ChooseYourLayoutProps {
+    setPageState: (page: number) => void;
+}
+
+export default function ChooseYourLayout({ setPageState }: ChooseYourLayoutProps){
 
     const setLayout = useStore((state) => state.setLayout)
 
