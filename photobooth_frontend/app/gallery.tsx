@@ -4,63 +4,82 @@ import { useRouter } from 'next/navigation';
 
 interface GalleryItem {
     id: string
-    imageUrl: string
-    createdAt: string
+    image_url: string
+    created_at: string
+    user_id: string
+    title: string
 }
 
-interface UserGallery {
-    userId: string
-    username: string
-    items: GalleryItem[]
-}
 
 export default function Gallery() {
     const router = useRouter()
 
-    const [galleries, setGalleries] = useState<UserGallery[]>([])
+    const [galleries, setGalleries] = useState<GalleryItem[]>([])
     // const [isAuthenticated, setIsAuthenticated] = useState(false)
 
 
     useEffect(() => {
-        const url = process.env.NEXT_PUBLIC_API_URL! + process.env.NEXT_PUBLIC_APP_PORT!
 
-        // check if user logged in
-        const response = fetch(url + '/me', {
-            method: 'GET',
-            credentials: 'include'
-        })
-            .then((response) => {
-                if (response.status === 404) {
-                    router.push('/auth/login')
-                }
-
-            }).catch((err) => {
-                console.log(err)
-
-            })
+        checkUserAuthentication()
+        getGalleries()
 
     }, [])
 
 
+    const checkUserAuthentication = async () => {
+        const url = process.env.NEXT_PUBLIC_API_URL! + process.env.NEXT_PUBLIC_APP_PORT!
+
+        // check if user logged in
+        const meResponse = await fetch(url + '/me', {
+            method: 'GET',
+            credentials: 'include'
+        })
+
+        if (!meResponse.ok) {
+            router.push('/auth/login')
+        }
+
+
+
+    }
+
+    const getGalleries = async () => {
+        const url = process.env.NEXT_PUBLIC_API_URL! + process.env.NEXT_PUBLIC_APP_PORT!
+
+        const galleriesReponse = await fetch(url + '/gallery/get-image-by-user-id', {
+            method: 'GET',
+            credentials: 'include'
+        })
+
+        const galleriesData = await galleriesReponse.json()
+        setGalleries(galleriesData)
+
+    }
+
 
     return (
-        <div>
-            <h1>User Galleries</h1>
-            {galleries.map(user => (
-                <div key={user.userId} style={{ marginBottom: '2rem' }}>
-                    <h2>{user.username}</h2>
-                    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-                        {user.items.map(item => (
-                            <div key={item.id}>
-                                <img src={item.imageUrl} alt="Gallery" style={{ width: 150, height: 150, objectFit: 'cover' }} />
-                                <div>
-                                    {new Date(item.createdAt).toLocaleString()}
-                                </div>
+        <div className='text-black'>
+            <div className='flex flex-wrap gap-x-12 md:gap-x-24 justify-center'>
+                {galleries.map(image => (
+                    <div key={image.id} >
+                        <div className='flex flex-col justify-center items-center text-sm text-gray-600 gap-4'>
+                            <img
+                                src={image.image_url}
+                                alt="Gallery"
+                                className='w-32 md:w-42 shadow-xl'
+                            />
+
+                            <div className='flex flex-col items-center gap-2'>
+                                {new Date(image.created_at).toLocaleDateString()}
+                                <h2>{image.title}</h2>
+
                             </div>
-                        ))}
+
+                        </div>
                     </div>
-                </div>
-            ))}
+                ))}
+            </div>
+
         </div>
     )
 }

@@ -41,7 +41,8 @@ export const galleryRoutes = new Elysia({ prefix: '/gallery' })
                 message: "Unauthenticated"
             }
         }
-        const { image_url, title } = body
+        const { image_url, title } = JSON.parse(body)
+
 
         // find user_id by session id
         const findUserID = await prisma.sessions.findUnique({

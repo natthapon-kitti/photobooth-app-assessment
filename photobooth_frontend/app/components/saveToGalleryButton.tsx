@@ -1,20 +1,16 @@
 "use client"
 
-import { useRouter } from "next/navigation"
-// import { useSession } from "next-auth/react"
+import { useStore } from "../store/store"
 
 type SaveToGalleryButtonProps = {
     imageUrl: string
 }
 
-export default function SaveToGalleryButton({ imageUrl }: SaveToGalleryButtonProps) {
-    // const { data: session, status } = useSession()
-    const router = useRouter()
+export default function SaveToGalleryButton({ imageUrl, caption }: SaveToGalleryButtonProps) {
 
-
+    const setPageState = useStore((state) => state.setPageState)
 
     const handleSave = async () => {
-
 
 
         try {
@@ -28,15 +24,22 @@ export default function SaveToGalleryButton({ imageUrl }: SaveToGalleryButtonPro
             })
                 .then((response) => {
 
+                    console.log(imageUrl)
                     const body = {
-                        image_url:""
+                        image_url: imageUrl,
+                        title: caption
                     }
 
+
+                    // send image to save
                     fetch(url + '/gallery/save-image', {
                         method: 'POST',
                         credentials: 'include',
-                        body: body
+                        body: JSON.stringify(body)
+                    }).then((res) => {
+                        setPageState(1)
                     })
+
 
                 }).catch((err) => {
                     console.log(err)

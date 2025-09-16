@@ -25,7 +25,7 @@ export default function PhotoCapture() {
     const [capturedPhotos, setCapturedPhotos] = useState<string[]>([])
     const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0)
     const [countdown, setCountdown] = useState<number | null>(null)
-
+    const [caption, setCaption] = useState("")
 
 
     const streamRef = useRef<MediaStream | null>(null)
@@ -57,12 +57,12 @@ export default function PhotoCapture() {
     const stopCamera = useCallback(async () => {
         if (streamRef.current) {
             // camera stop
-            streamRef.current.getTracks().forEach((track) => track.stop());
-            streamRef.current = null;
+            streamRef.current.getTracks().forEach((track) => track.stop())
+            streamRef.current = null
             setIsCameraOpen(false)
         }
         if (videoRef.current) {
-            videoRef.current.srcObject = null;
+            videoRef.current.srcObject = null
         }
 
         setIsCapturing(false)
@@ -115,8 +115,6 @@ export default function PhotoCapture() {
                     setCurrentPhotoIndex(newPhotos.length)
 
                     console.log("Current Photo:", newPhotos)
-
-
 
 
 
@@ -173,8 +171,8 @@ export default function PhotoCapture() {
         ctx.fillRect(0, 0, canvas.width, canvas.height)
 
         for (let i = 0; i < photos.length; i++) {
-            const img = new Image();
-            img.crossOrigin = "anonymous";
+            const img = new Image()
+            img.crossOrigin = "anonymous"
 
             await new Promise((resolve) => {
                 img.onload = () => {
@@ -219,8 +217,8 @@ export default function PhotoCapture() {
                 setTimeout(() => {
                     capturePhoto()
                     setCountdown(0)
-                }, 1000);
-                poses -= 1;
+                }, 1000)
+                poses -= 1
                 console.log("Remaining poses:", poses)
 
                 // check if more poses needed
@@ -263,9 +261,9 @@ export default function PhotoCapture() {
                     setCurrentPhotoIndex(0)
                 }
             }
-        };
+        }
 
-        processPhotos();
+        processPhotos()
 
     }, [capturedPhotos])
 
@@ -342,15 +340,31 @@ export default function PhotoCapture() {
                 }
             </div>
 
+            <div className="w-full">
+                {
+                    capturedImage
+                    &&
+                    <input
+                        type="text"
+                        placeholder="Caption 🥳"
+                        onChange={(e) => setCaption(e.target.value)}
+                        className="w-full px-4 py-2 text-black border border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 transition "
+                    />
+                }
+
+            </div>
 
             <div className="flex justify-center items-center gap-4 z-50">
 
                 {
                     capturedImage
                         ?
+
                         <SaveToGalleryButton
-                            imageUrl=""
+                            imageUrl={capturedImage}
+                            caption={caption}
                         />
+
                         :
                         <ChangeLayoutButton
                             setPageState={setPageState}
