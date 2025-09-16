@@ -7,7 +7,7 @@ export default function Navbar() {
     const setPageState = useStore((state) => state.setPageState)
 
     return (
-        <nav className="absolute top-0 right-[12%] w-full h-24 md:h-46  text-black flex items-center justify-end ">
+        <nav className="absolute top-0 right-[12%] w-full h-24 pt-8 md:h-46  text-black flex items-center justify-end ">
 
 
 

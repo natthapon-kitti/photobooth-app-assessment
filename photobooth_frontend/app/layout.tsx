@@ -2,7 +2,6 @@
 import type { Metadata } from "next"
 import { Libertinus_Serif, Poppins } from "next/font/google"
 import "./globals.css"
-import NextAuthProvider from "./sessionProvider"
 
 
 

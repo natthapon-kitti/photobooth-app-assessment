@@ -24,7 +24,7 @@ export default function Main() {
                 // Gallery (3rd state)
                 return <Gallery />
             default:
-                <ChooseYourLayout />
+                <ChooseYourLayout setPageState={setPageState} />
         }
 
 
