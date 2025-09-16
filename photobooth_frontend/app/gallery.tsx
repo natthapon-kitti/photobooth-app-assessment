@@ -60,24 +60,25 @@ export default function Gallery() {
     return (
         <div className='text-black'>
             <div className='flex flex-wrap gap-x-12 md:gap-x-24 justify-center'>
-                {galleries.map(image => (
-                    <div key={image.id} >
-                        <div className='flex flex-col justify-center items-center text-sm text-gray-600 gap-4'>
-                            <img
-                                src={image.image_url}
-                                alt="Gallery"
-                                className='w-32 md:w-42 shadow-xl'
-                            />
+                {
+                    galleries && galleries.length > 0 && galleries?.map(image => (
+                        <div key={image.id} >
+                            <div className='flex flex-col justify-center items-center text-sm text-gray-600 gap-4'>
+                                <img
+                                    src={image.image_url}
+                                    alt="Gallery"
+                                    className='w-32 md:w-42 shadow-xl'
+                                />
 
-                            <div className='flex flex-col items-center gap-2'>
-                                {new Date(image.created_at).toLocaleDateString()}
-                                <h2>{image.title}</h2>
+                                <div className='flex flex-col items-center gap-2'>
+                                    {new Date(image.created_at).toLocaleDateString()}
+                                    <h2>{image.title}</h2>
+
+                                </div>
 
                             </div>
-
                         </div>
-                    </div>
-                ))}
+                    ))}
             </div>
 
         </div>

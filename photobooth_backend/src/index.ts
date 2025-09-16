@@ -63,7 +63,7 @@ const app = new Elysia()
     session.value = sessionId
     session.httpOnly = true
     session.maxAge = 3600 * 24
-    session.sameSite = 'lax'
+    session.sameSite = 'none'
     session.secure = true
 
     return { success: true }
@@ -105,7 +105,7 @@ const app = new Elysia()
     session.value = sessionId
     session.httpOnly = true
     session.maxAge = 3600 * 24
-    session.sameSite = 'lax'
+    session.sameSite = 'none'
     session.secure = true
 
     return { success: true }
