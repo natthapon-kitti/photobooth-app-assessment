@@ -1,14 +1,16 @@
 "use client"
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
+import { useStore } from "@/app/store/store"
 
 export default function Login() {
+    const router = useRouter()
+    const setPageState = useStore((state) => state.setPageState)
     const [form, setForm] = useState({
         email: '',
         password: '',
     })
     const [error, setError] = useState("")
-    const router = useRouter()
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
@@ -32,7 +34,8 @@ export default function Login() {
             })
             if (!response.ok) throw new Error("Invalid credentials")
 
-            router.push("/gallery")
+            router.push("/")
+            setPageState(3)
 
             alert(`Logged in as ${form.email}`)
         } catch {
@@ -50,7 +53,8 @@ export default function Login() {
                 if (response.status === 404) {
                     router.push('/auth/login')
                 } else {
-                    router.push('/gallery')
+                    router.push("/")
+                    setPageState(3)
                 }
 
             }).catch((err) => {

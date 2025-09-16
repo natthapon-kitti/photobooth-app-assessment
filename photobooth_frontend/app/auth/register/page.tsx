@@ -1,10 +1,11 @@
 "use client"
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useStore } from "@/app/store/store"
 
 export default function Register() {
     const router = useRouter()
-
+    const setPageState = useStore((state) => state.setPageState)
     const [form, setForm] = useState({
         name: '',
         email: '',
@@ -34,7 +35,8 @@ export default function Register() {
             })
             if (!response.ok) throw new Error("Invalid credentials")
 
-            router.push("/gallery")
+            router.push("/")
+            setPageState(3)
 
             alert(`Logged in as ${form.email}`)
         } catch (err: any) {
