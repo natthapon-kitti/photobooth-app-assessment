@@ -23,6 +23,8 @@ export default function Gallery() {
 
     useEffect(() => {
         const url = process.env.NEXT_PUBLIC_API_URL! + process.env.NEXT_PUBLIC_APP_PORT!
+
+        // check if user logged in
         const response = fetch(url + '/me', {
             method: 'GET',
             credentials: 'include'
@@ -30,7 +32,6 @@ export default function Gallery() {
             .then((response) => {
                 if (response.status === 404) {
                     router.push('/auth/login')
-
                 }
 
             }).catch((err) => {
