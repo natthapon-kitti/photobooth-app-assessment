@@ -7,6 +7,7 @@ import TakingPhotoButton from "../components/takingPhotoButton"
 import { useStore } from "@/app/store/store"
 import ChangeLayoutButton from "../components/changeLayoutButton"
 import { compressImage } from "../lib/image-utils"
+import SaveToGalleryButton from "../components/saveToGalleryButton"
 
 
 export default function PhotoCapture() {
@@ -343,11 +344,21 @@ export default function PhotoCapture() {
 
 
             <div className="flex justify-center items-center gap-4 z-50">
-                <ChangeLayoutButton
-                    setPageState={setPageState}
-                    isCameraOpen={isCameraOpen}
-                    setIsCameraOpen={setIsCameraOpen}
-                />
+
+                {
+                    capturedImage
+                        ?
+                        <SaveToGalleryButton
+                            imageUrl=""
+                        />
+                        :
+                        <ChangeLayoutButton
+                            setPageState={setPageState}
+                            isCameraOpen={isCameraOpen}
+                            setIsCameraOpen={setIsCameraOpen}
+                        />
+                }
+
 
                 <TakingPhotoButton
                     isCameraOpen={isCameraOpen}
