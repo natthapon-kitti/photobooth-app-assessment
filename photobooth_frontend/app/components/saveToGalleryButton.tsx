@@ -11,23 +11,39 @@ export default function SaveToGalleryButton({ imageUrl }: SaveToGalleryButtonPro
     // const { data: session, status } = useSession()
     const router = useRouter()
 
-    const handleSave = async () => {
-        const isAuthenticated = checkCookie("session")
 
-        if (!isAuthenticated) {
-            alert("Please log in to save to gallery.")
-            router.push("/login")
-            return
-        }
+
+    const handleSave = async () => {
+
+
 
         try {
-            // const res = await fetch("/api/gallery", {
-            //     method: "POST",
-            //     headers: { "Content-Type": "application/json" },
-            //     body: JSON.stringify({ imageUrl }),
-            // })
+            const url = process.env.NEXT_PUBLIC_API_URL! + process.env.NEXT_PUBLIC_APP_PORT!
+
+            // check if user logged in 
+            // if no so let user login first
+            const response = fetch(url + '/me', {
+                method: 'GET',
+                credentials: 'include'
+            })
+                .then((response) => {
+
+                    const body = {
+                        image_url:""
+                    }
+
+                    fetch(url + '/gallery/save-image', {
+                        method: 'POST',
+                        credentials: 'include',
+                        body: body
+                    })
+
+                }).catch((err) => {
+                    console.log(err)
+
+                })
+
             // if (!res.ok) throw new Error("Failed to save")
-            alert("Saved to gallery!")
         } catch (error) {
             console.log(error)
             alert("Failed to save.")
