@@ -1,8 +1,4 @@
 # 📸 Photobooth App: Project Documentation
-Project Overview
-This section should provide a brief, high-level summary of the application. Explain what the "photobooth app" is, its purpose, and who its intended users are.
-
-Example:
 This is a full-stack web application designed for a photobooth experience. It allows users to take photos, view a gallery of past photos, and manage their account. The application includes a backend API to handle photo storage and user authentication, and a frontend user interface for interacting with the photobooth.
 
 Demo link: https://photobooth-app-assessment-soym.vercel.app/
